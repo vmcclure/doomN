@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:41:37 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/05/15 19:53:55 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/05/16 19:28:37 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,33 +150,30 @@ int		clip(t_player *player, t_fvector p[4], float offset[4], size_t c)
 	peresechenie = 1;
 	if (p[0].z <= 0 && p[1].z <= 0 && p[2].z <= 0 && p[3].z <= 0)
 		return (0);
-	tmpp[0] = p[0];
-	tmpp[1] = p[1];
-	tmpp[2] = p[2];
-	tmpp[3] = p[3];
+	// tmpp[0] = p[0];
+	// tmpp[1] = p[1];
+	// tmpp[2] = p[2];
+	// tmpp[3] = p[3];
 	l.p[0].x = 0;
 	l.p[0].y = 0;
-	l.p[1].x = cos(-1.047197551/2.0) * 100;
-	l.p[1].y = sin(-1.047197551/2.0) * 100;
+	l.p[1].x = cos(-1.047197551/2.0) * 1000;
+	l.p[1].y = sin(-1.047197551/2.0) * 1000;
 	l.p[2].x = p[0].z;
 	l.p[2].y = p[0].x;
 	l.p[3].x = p[1].z;
 	l.p[3].y = p[1].x;
 	peresechenie = collideline(l);
-	// printf ("%zu - %d\n", c, peresechenie);
-
+	
 
 	// offset[0] = 1;
 	if (peresechenie == 1)
-	{
-		switchcordwall(&p[0], &p[1], &offset[0], setfvector2d(
-			cos(-1.047197551) * 100, sin(-1.047197551) * 100));
-			
+	{	
 
-		switchcordwall(&p[2], &p[3], &offset[2], setfvector2d(
-			cos(-1.047197551) * 100, sin(-1.047197551) * 100));
-		// printf ("%zu - %f\n", c, offset[1]);
-	
+			switchcordwall(&p[1], &p[0], &offset[1], setfvector2d(
+				cos(-1.047197551) * 1000, sin(-1.047197551) * 1000));
+			switchcordwall(&p[3], &p[2], &offset[3], setfvector2d(
+				cos(-1.047197551) * 1000, sin(-1.047197551) * 1000));
+		// printf ("%zu - %f - %f - %f - %f\n", c, offset[0], p[0].z,  p[0].x,  p[0].y);
 	}
 	
 	// p[0] = tmpp[0];
@@ -185,8 +182,8 @@ int		clip(t_player *player, t_fvector p[4], float offset[4], size_t c)
 	// p[3] = tmpp[3];
 	l.p[0].x = 0;
 	l.p[0].y = 0;
-	l.p[1].x = cos(1.048) * 100;
-	l.p[1].y = sin(1.048) * 100;
+	l.p[1].x = cos(1.048) * 1000;
+	l.p[1].y = sin(1.048) * 1000;
 	l.p[2].x = p[0].x;
 	l.p[2].y = p[0].z;
 	l.p[3].x = p[1].x;
@@ -195,11 +192,14 @@ int		clip(t_player *player, t_fvector p[4], float offset[4], size_t c)
 	// printf ("%zu - %d\n", c, peresechenie);
 	 if (peresechenie == 1)
 	 {		
-		switchcordwall(&p[1], &p[0], &offset[1], setfvector2d(
-			cos(1.048) * 100, sin(1.048) * 100));
-		switchcordwall(&p[3], &p[2], &offset[3], setfvector2d(
-			cos(1.048) * 100, sin(1.048) * 100));
-		// printf ("%zu - %f\n", c, offset[1]);
+
+			switchcordwall(&p[0], &p[1], &offset[0], setfvector2d(
+				cos(1.048) * 1000, sin(1.048) * 1000));
+			switchcordwall(&p[2], &p[3], &offset[2], setfvector2d(
+				cos(1.048) * 1000, sin(1.048) * 1000));
+		
+		// printf ("%zu - %f - %f - %f - %f - %zu\n", c, offset[1], p[1].x,  p[0].x,   p[0].y, player->sector);
+		// printf ("%zu - %f - %f - %f - %f\n", c, offset[1], p[1].z,  p[1].x,  p[1].y);
 	
 	 }
 	 if (p[0].z <= 0 || p[1].z <= 0 || p[2].z <= 0 || p[3].z <= 0)
@@ -308,7 +308,7 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	c = 0;
 	cammat = matcam(&play);
 	projec = matprojection(initcam(setivector2d(800, 800)));
-	printf ("\n");
+	
 	while (c < count)
 	{
 		wa.p[0] = setfvector(w[c].x, floor, w[c].y, 1);
@@ -320,10 +320,9 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 		offset[1] = 1;
 		offset[2] = 1;
 		offset[3] = 1;
-
+		
 		if (clip(&play, wa.p, offset, c))
 		{
-			// printf ("%zu\n", c);
 			multmatrixdrawwall(wa.p, projec);
 			tmpp[0] = wa.p[0];
 			tmpp[1] = wa.p[1];
@@ -333,7 +332,6 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 			wa.p[1] = divfvector(wa.p[1], wa.p[1].w, wa.p[1].w, wa.p[1].w);
 			wa.p[2] = divfvector(wa.p[2], wa.p[2].w, wa.p[2].w, wa.p[2].w);
 			wa.p[3] = divfvector(wa.p[3], wa.p[3].w, wa.p[3].w, wa.p[3].w);
-
 			adddrawwall(wa.p, 1, 1, 0);
 			multdrawwall(wa.p, 400, 400, 1);
 			if (w[c].z == -1)
@@ -346,16 +344,16 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 				ft_swap((void**)&wa.p[2], (void**)&wa.p[3]);
 				ft_swap((void**)&offset[1], (void**)&offset[0]);
 			}
-			// if (w[c].z == -1)
-			drow_wall(p, wa, *tga, offset);
+			if (w[c].z == -1)
+				drow_wall(p, wa, *tga, offset);;
 			drawline(p, wa.p[0], wa.p[1], color);
 			drawline(p, wa.p[0], wa.p[2], color);
 			drawline(p, wa.p[2], wa.p[3], color);
 			drawline(p, wa.p[1], wa.p[3], color);
 		}
-
 		c++;
 	}
+	
 }
 
 void	drawplayer(uint32_t *p, t_player play)
@@ -376,42 +374,47 @@ void	draw(t_doom *doom)
 
 	SDL_RenderClear(doom->win->renderer);
 	cleartexture(doom->win);
-	// i = doom->thismap.sectorcount - 1;
-	// while (i > -1)
-	// {
-	// 	switch (i)
-	// 	{
-	// 		case 0:
-	// 			colorfloor = setrgb(0, 0, 255);
-	// 			colorceil = setrgb(150, 150, 150);
-	// 			break;
-	// 		case 1:
-	// 			colorfloor = setrgb(0, 255, 0);
-	// 			colorceil = setrgb(0, 150, 150);
-	// 			break;
-	// 		case 2:
-	// 			colorfloor = setrgb(255, 0, 0);
-	// 			colorceil = setrgb(0, 0, 150);
-	// 			break;
-	// 		default:
-	// 			colorfloor = setrgb(255, 255, 255);
-	// 			colorceil = setrgb(50, 50, 50);
-	// 			break;
-	// 	}
-	// 	drawsectorv2(doom->win->pixels, doom->player, doom->thismap.walls +
-	// 	doom->thismap.sectors[i].start,
-	// 	doom->thismap.sectors[i].count,
-	// 	doom->thismap.sectors[i].floor,
-	// 	doom->thismap.sectors[i].height, colorfloor, colorceil, i);
-	// 	i--;
-	// }
-	colorfloor = setrgb(0, 0, 255);
-	colorceil = setrgb(150, 150, 150);
-	drawsectorv2(doom->win->pixels, doom->player, doom->thismap.walls +
-	doom->thismap.sectors[doom->player.sector].start,
-	doom->thismap.sectors[doom->player.sector].count,
-	doom->thismap.sectors[doom->player.sector].floor,
-	doom->thismap.sectors[i].height, colorfloor, colorceil, doom->player.sector);
+	i = doom->thismap.sectorcount - 1;
+	while (i > -1)
+	{
+		switch (i)
+		{
+			case 0:
+				colorfloor = setrgb(0, 0, 255);
+				colorceil = setrgb(150, 150, 150);
+				break;
+			case 1:
+				colorfloor = setrgb(0, 255, 0);
+				colorceil = setrgb(0, 150, 150);
+				break;
+			case 2:
+				colorfloor = setrgb(255, 0, 0);
+				colorceil = setrgb(0, 0, 150);
+				break;
+			default:
+				colorfloor = setrgb(255, 255, 255);
+				colorceil = setrgb(50, 50, 50);
+				break;
+		}
+		// if (doom->thismap.sectors[i].floor == 3)
+		// doom->thismap.sectors[i].floor = 1;
+		drawsectorv2(doom->win->pixels, doom->player, doom->thismap.walls +
+		doom->thismap.sectors[i].start,
+		doom->thismap.sectors[i].count,
+		doom->thismap.sectors[i].floor,
+		doom->thismap.sectors[i].height, colorfloor, colorceil, i);
+		// printf ("%d \n", doom->thismap.sectors[i].floor);
+		i--;
+		
+	}
+	// printf ("\n");
+	// colorfloor = setrgb(0, 0, 255);
+	// colorceil = setrgb(150, 150, 150);
+	// drawsectorv2(doom->win->pixels, doom->player, doom->thismap.walls +
+	// doom->thismap.sectors[doom->player.sector].start,
+	// doom->thismap.sectors[doom->player.sector].count,
+	// doom->thismap.sectors[doom->player.sector].floor,
+	// doom->thismap.sectors[i].height, colorfloor, colorceil, doom->player.sector);
 
 	drawsector(doom->win->pixels, doom->player, doom->thismap.walls +
 	doom->thismap.sectors[doom->player.sector].start,

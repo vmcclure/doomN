@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/15 14:52:17 by vmcclure          #+#    #+#             */
-/*   Updated: 2019/05/15 19:56:31 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/05/16 18:47:44 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,10 @@ void drow_wall(uint32_t *p, t_wall wall, t_tga image, float	*offset)
 	int mindist;
 	int buf;
 	int start;
+	
 	if( wall.p[0].x > 800 || wall.p[1].x > 800 || wall.p[0].x < -2 || wall.p[1].x < -2)
+		return;
+	if( wall.p[0].y > 8000 || wall.p[1].y > 8000 || wall.p[0].y < -8000 || wall.p[1].y < -8000)
 		return;
 	dx1 = (wall.p[1].x - wall.p[0].x);
 	dy1 = (wall.p[1].y - wall.p[0].y);
@@ -173,7 +176,7 @@ void drow_wall(uint32_t *p, t_wall wall, t_tga image, float	*offset)
 	{
 		
 		kef[0] = 0;//(float)maxdist/offset[1] - (float)maxdist;
-		m[0] = (((float)(maxdist+1)/offset[1])) / (float)(image.width);
+		m[0] = (((float)(maxdist)/offset[1])) / (float)(image.width);
 	}
 	if (offset[0] < 1)
 	{
@@ -183,7 +186,7 @@ void drow_wall(uint32_t *p, t_wall wall, t_tga image, float	*offset)
 	if (offset[1] < 1 && offset[0] < 1)
 	{
 		m[0] = (((float)maxdist/(offset[0] * offset[1]))) / (float)(image.width);
-		kef[0] = (float)maxdist/(offset[0] * offset[1]) - ((float)maxdist / offset[1]);
+		kef[0] = (float)maxdist/(offset[0] * offset[1]) - ((float)maxdist / (offset[1]));
 	}
 	while (x < maxdist)
 	{
