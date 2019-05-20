@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:41:37 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/05/16 19:28:37 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/05/18 16:28:41 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,11 +303,13 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	size_t		c;
 	t_fvector2d	r;
 	int x;
-
+	t_rgb color1;
+	
 	x = 0;
 	c = 0;
 	cammat = matcam(&play);
 	projec = matprojection(initcam(setivector2d(800, 800)));
+
 	
 	while (c < count)
 	{
@@ -344,8 +346,11 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 				ft_swap((void**)&wa.p[2], (void**)&wa.p[3]);
 				ft_swap((void**)&offset[1], (void**)&offset[0]);
 			}
+			color1 = setrgb(255, 0, 255);
+			
 			if (w[c].z == -1)
 				drow_wall(p, wa, *tga, offset);;
+			drawfloor(p, wa, color1,play);
 			drawline(p, wa.p[0], wa.p[1], color);
 			drawline(p, wa.p[0], wa.p[2], color);
 			drawline(p, wa.p[2], wa.p[3], color);

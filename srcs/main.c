@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:40:04 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/05/16 17:08:14 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/05/17 14:52:22 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int				main(int agrc, char **argv)
 	switchlevel(doom, doom->level);
 	doom->currentframe = SDL_GetPerformanceCounter();
 	tga = tga_reader(argv[1]);
+	tgafloor = tga_reader("pol.tga");
 	while (doom->win->state)
 	{
 		doom->lastframe = doom->currentframe;
