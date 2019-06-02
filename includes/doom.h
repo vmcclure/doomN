@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:40:29 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/05/17 14:46:19 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/06/02 17:05:01 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # ifdef __APPLE__
 #  define CREATEFLAG S_IWRITE | S_IREAD
 #  include "../lib/SDL/include/SDL2/SDL.h"
+#  include "../lib/SDL/include/SDL2/SDL_mixer.h"
 # elif __linux__
 #  define CREATEFLAG __S_IWRITE | __S_IREAD
 #  include <SDL2/SDL.h>
@@ -36,6 +37,14 @@
 #  include <C:\MinGW\msys\1.0\include\SDL2\SDL.h>
 #  include <C:\MinGW\msys\1.0\include\SDL2\SDL_mixer.h>
 # endif
+
+typedef struct	s_camera
+{
+	float		near;
+	float		far;
+	float		fov;
+	float		aspectratio;
+}				t_camera;
 
 typedef struct	s_window
 {
@@ -93,6 +102,8 @@ typedef struct	s_input
 	int			rotup;
 	int			rotdown;
 	int			jump;
+	t_ivector2d	mousepos;
+	int			mousekey[3];
 }				t_input;
 
 typedef struct	s_player
@@ -118,6 +129,36 @@ typedef struct	s_player
 	int			jump;
 }				t_player;
 
+typedef enum	e_typeobj
+{
+	PLAYER,
+	DECORE,
+	ENEMY
+}				t_typeobj;
+
+typedef struct	s_object
+{
+	t_typeobj	typeobject;
+	size_t		sector;
+
+	t_fvector	pos;
+	t_fvector	rotate;
+	t_fvector	velosity;
+
+	float		width;
+
+	int			health;
+	float		maxhealth;
+
+	int			ismoveble;
+	float		movespeed;
+
+	int			isagression;
+	int			agressionarea;
+
+	size_t		texture;
+}				t_object;
+
 typedef struct	s_sector
 {
 	size_t			start;
@@ -125,6 +166,7 @@ typedef struct	s_sector
 	int				floor;
 	int				height;
 	int				type;
+	size_t			walltexture;
 }				t_sector;
 
 typedef struct	s_map
@@ -133,14 +175,44 @@ typedef struct	s_map
 	size_t		sectorcount;
 	t_fvector	*walls;
 	size_t		wallcount;
+
+	t_object	*obj;
+	size_t		objcount;
+
 	t_player	startplayer;
 }				t_map;
+
+void		moveenemy(t_player play, t_map *map, t_object *obj, float delta);
+void		agressionememy(t_player *player, t_object *obj);
+void		damageenemy(t_player *player, t_object *obj, double delta);
 
 typedef struct	s_wall
 {
 	t_fvector	p[4];
-	t_tga		texture;
+	float		offset[4];
 }				t_wall;
+
+typedef struct	s_setting
+{
+	t_input		input;
+	t_ivector2d	resolution;
+	float		soundvolume;
+	float		musicvolume;
+}				t_setting;
+
+typedef struct	s_button
+{
+	t_tga		texture;
+	t_irect		rect;
+}				t_button;
+
+typedef struct	s_settingui
+{
+	t_button	plussound;
+	t_button	minussound;
+	t_button	plusmusic;
+	t_button	minusmusic;
+}				t_settingui;
 
 typedef struct	s_doom
 {
@@ -152,7 +224,12 @@ typedef struct	s_doom
 	Uint64		currentframe;
 	double		delta;
 
-	t_input		input;
+	t_setting	setting;
+	t_settingui	settingui;
+
+	t_tga		*texture;
+	size_t		texturecount;
+	t_tga		*font;
 
 	t_player	player;
 
@@ -164,18 +241,34 @@ typedef struct	s_doom
 
 t_tga		*tga;
 t_tga		*tgafloor;
+t_tga		*tgaenemy;
+
+void		initsettingui(t_doom *doom);
+void		initsetting(t_setting *s);
 
 void		drawpoint(uint32_t *p, t_ivector2d size, t_ivector2d cord, t_rgba color);
+void		drawrect(t_doom *doom, t_irect rect, t_rgba color);
 void		drawline(uint32_t *p, t_fvector start, t_fvector end, t_rgb color);
 void		drawsector(uint32_t *p, t_player play, t_fvector *w, size_t count);
-void		drow_wall(uint32_t *p, t_wall wall, t_tga image, float *offset);
-void		drawfloor(uint32_t *p, t_wall wa, t_rgb color, t_player player);
+void		drow_wall(uint32_t *p, t_wall wall, t_tga image, float *offset, float rotate_x);
+void		drawfloor(uint32_t *p, t_wall wa, t_rgb color, t_player player, double *offloor, t_fvector	*fl);
 void		drawceil(uint32_t *p, t_wall wa, t_rgb color);
+
+void		drawobj(t_doom *doom, t_map map);
+
+void		drawminimap(uint32_t *p, t_doom *doom, size_t sector, t_ivector2d cord);
+void		drawoptionmenu(t_doom *doom);
+
+void		addmusic(t_setting *s);
+void		submusic(t_setting *s);
+void		addsound(t_setting *s);
+void		subsound(t_setting *s);
 
 void		destrotwindow(t_doom *doom);
 
 void		updateevent(t_doom *doom);
 void		update(t_doom *doom, double delta);
+void		updateui(t_doom *doom);
 void		draw(t_doom *doom);
 void		drawui(t_doom *doom);
 void		quitprogram(t_doom *doom);
@@ -183,6 +276,11 @@ void		quitprogram(t_doom *doom);
 t_player	defaultplayerdata(void);
 void		addstamina(t_player *p, float addvalue);
 void		minusstamina(t_player *p, float minusvalue);
+
+void		addhealth(t_player *p, float addvalue);
+void		minushealth(t_player *p, float minusvalue);
+void		playerdeath(t_player *p);
+
 void		playermove(t_doom *doom, double delta);
 void		playerjump(t_doom *doom, t_player *player);
 
@@ -196,6 +294,20 @@ size_t		isinside(t_fvector2d pos, t_map	map, size_t	lastsecid);
 void		loadassets(char *path, t_doom *doom);
 t_map		loadmap(char *path);
 void		switchlevel(t_doom *doom, size_t level);
+
+t_mat4x4	matcam(t_player *player);
+t_mat4x4	matprojection(t_camera cam);
+t_camera	initcam(t_ivector2d sizewin);
+
+int			clip(t_player *player, t_fvector p[4], float offset[4], size_t c);
+
+void		initdrawwall(t_fvector *view);
+void		multmatrixdrawwall(t_fvector *view, t_mat4x4 mat);
+void		wallproj(t_fvector *view, t_mat4x4 proj);
+void		divdrawwall(t_fvector *view, float x, float y, float z);
+void		adddrawwall(t_fvector *view, float x, float y, float z);
+void		subdrawwall(t_fvector *view, float x, float y, float z);
+void		multdrawwall(t_fvector *view, float x, float y, float z);
 
 void		free2dstring(char **str);
 size_t		stringcount(char **str);
