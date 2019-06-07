@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/28 15:14:48 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/05/29 17:05:02 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/06/05 17:47:16 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	drawobj(t_doom *doom, t_map map)
 				swap_float1(&wa.offset[1], &wa.offset[0]);
 				swap_float1(&wa.offset[3], &wa.offset[2]);
 			}
-			drow_wall(doom->win->pixels, wa, doom->texture[doom->thismap.obj[c].texture], wa.offset);
+			drow_wall(doom->win->pixels, wa, doom->texture[doom->thismap.obj[c].texture], wa.offset, 0.1);
 		}
 	}
 }

@@ -13,7 +13,7 @@ SRCS = main.c \
 		engine/filesystem/loadassets.c engine/filesystem/loadmap.c \
 		engine/serialize/serializeint.c engine/serialize/deserializeint.c \
 		engine/input/loadinput.c \
-		engine/draw/drawwall.c engine/draw/drawline.c engine/draw/drawceil.c engine/draw/drawfloor.c engine/draw/drawpoint.c engine/draw/drawrect.c
+		engine/draw/drawwall.c engine/draw/drawline.c engine/draw/drawceil.c engine/draw/drawfloor.c engine/draw/drawpoint.c engine/draw/drawrect.c engine/draw/drawfloor1.c
 SRCSFOLDER = ./srcs/
 OBJNAME = $(SRCS:.c=.o)
 OBJDIR = ./obj/
