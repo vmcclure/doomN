@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:41:37 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/06/07 19:36:37 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/06/12 21:30:37 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,7 @@ int		clip(t_player *player, t_fvector p[4], float offset[4], size_t c)
 	tmpp[3] = p[3];
 	peresechenie = collideline(l);
 	per = 0;
-	// if (c == 5)
-	// {
-	// 	printf ("tyt\n");
-	// }
+
 	if (peresechenie == 1)					// лево низ
 	{		
 		per = 1;
@@ -158,14 +155,7 @@ int		clip(t_player *player, t_fvector p[4], float offset[4], size_t c)
 			// printf ("%zu 2 %f %f\n", c, offset[2], offset[1]);
 		p[2] = tmpp[2];
 	}
-	// if (per == 1)
-	// {
-	// 	switchcordwall(&p[1], &p[0], &offset[1], setfvector2d(
-	// 	cos(-1.048) * 1000, sin(-1.048) * 1000));
-	// 	return (1);
-	// }
-	// if (c == 99)
-	// 	printf("%f %f %f %f \n",offset[0], offset[1],offset[2],offset[3]);
+
 	if (p[0].z <= 0 || p[1].z <= 0 || p[2].z <= 0 || p[3].z <= 0)
 		return (0);
 	return (1);
@@ -210,19 +200,15 @@ void clipforfloor(t_player *player, t_fvector *p, float *topleft, float *toprigh
 	
 	
 	peresechenie = 1;
-	// mask = (int *)malloc(sizeof(int) * 4);
-	// while (i < 4)
-	// {
-	// 	mask[i] = 0;
-	// 	i++;
-	// }
 	i = 0;
 	l.p[0].x = 0;
 	l.p[0].y = 0;
 	l.p[1].x = cos(-1.0471975512/2.0) * 1000.0;
 	l.p[1].y = sin(-1.0471975512/2.0) * 1000.0;
+	i = 0;
 	while (i < 4)
 	{
+		
 		l.p[2].x = p[i].z;
 		l.p[2].y = p[i].x;
 		l.p[3].x = p[i+1 == 4 ? 0 : i+1].z;
@@ -230,10 +216,10 @@ void clipforfloor(t_player *player, t_fvector *p, float *topleft, float *toprigh
 		peresechenie = collideline(l);
 		if (peresechenie == 1)
 		{
-			// printf("%f %f\n", p[i].x, p[i].z);
 			switchcordwall(&p[i], &p[i+1 == 4 ? 0 : i+1], &offset, setfvector2d(
 			cos(-1.0471975512) * 1000, sin(-1.0471975512) * 1000));
-			offset = 1.0-offset;
+
+			offset = offset;
 			if (i == 0)
 			{
 				topleft[0] = 0;
@@ -254,12 +240,8 @@ void clipforfloor(t_player *player, t_fvector *p, float *topleft, float *toprigh
 				topleft[0] = offset;
 				topleft[1] = 0;
 			}
-			e = i;
-				// printf("%d ", i);
+			// printf("1 %d \n", i);
 			break ;
-			// printf("%f %f\n\n", p[i].x, p[i].z);
-			
-			// return (setfvector(0, p[i].y, ret.x, 1));
 		}
 		i++;
 	}
@@ -277,11 +259,8 @@ void clipforfloor(t_player *player, t_fvector *p, float *topleft, float *toprigh
 		peresechenie = collideline(l);
 		if (peresechenie == 1)
 		{
-			// printf("%f %f\n", p[i].x, p[i].z);
 			switchcordwall(&p[i+1 == 4 ? 0 : i+1], &p[i], &offset, setfvector2d(
 			cos(1.0471975512) * 1000, sin(1.0471975512) * 1000));
-			offset = 1.0-offset;
-			// printf("%f \n", offset);
 			if (i == 0)
 			{
 				topright[0] = 0;
@@ -303,16 +282,9 @@ void clipforfloor(t_player *player, t_fvector *p, float *topleft, float *toprigh
 				topright[1] = 0;
 			}
 			break ; 
-			// return (setfvector(0, p[i].y, ret.x, 1));
 		}
 		i++;
 	}
-	// if (e % 2 == i % 2 && i != e)
-	// 	mask[i - 1 == -1 ? 3 : i-1] = 1;
-	// if (e != i)
-	// 	mask[i] = 1;
-	// printf("%d %d !!! %d %d %d %d\n", e, i, mask[0], mask[1], mask[2], mask[3]);
-	// return (mask);
 }
 void	swap_float(float *a, float *b)
 {
@@ -323,14 +295,29 @@ void	swap_float(float *a, float *b)
 }
 t_fvector    raycastfloor(t_fvector2d angle, t_fvector2d yse)
 {
-    t_fvector    res;
+     t_fvector    res;
     t_fvector    step;
 
-    step.y = (yse.y - yse.x) / sin(angle.y);
-    res.y = yse.y;
-    res.z = step.y * cos(angle.y);
-    step.z = res.z / cos(angle.x);
-    res.x = step.z * sin(angle.x);
+	float xt;
+	float dir;
+	float dist;
+	float yt;
+	dir = angle.y;
+	xt = ((yse.y - yse.x) / sin(dir)) * cos(dir);
+	dist =  pow(pow(xt, 2) + pow(yse.y - yse.x, 2), 0.5);//y - 800.0;//
+	// printf("%f\n", dist);
+	yt = dist * cos(angle.x);
+	// printf("%f\n", yt);
+	// x = x + dist * cos(dir) * e ;
+	// y = y - dist * sin(dir);
+	res.x =  dist * sin(angle.x);
+	res.z =  dist * cos(angle.x);
+    // step.y = (yse.y - yse.x) / sin(angle.y);
+    // res.y = yse.y;
+    // res.z = step.y * cos(angle.y);
+    // step.z = res.z / cos(angle.x);
+    // res.x = step.z * sin(angle.x);
+
     return (res);
 }
 
@@ -358,13 +345,14 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	float offloorleft[2];
 	float topleft[2];
 	float topright[2];
-	int kef;
+	float kef;
 	int *mask;
 	x = 0;
 	c = 0;
 	cammat = matcam(&play);
 	projec = matprojection(initcam(setivector2d(800, 800)));
-
+	if (i ==0)
+		calculate_floor(play, w, p, texture, count, floor);
 	//calculate floor
 	t_fvector2d min;
 	t_fvector2d max;
@@ -380,8 +368,8 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 		c++;
 	}
 	// if (i == 0)
-	t_fvector a = raycastfloor(setfvector2d(1.0471975512, -1.0471975512), setfvector2d(play.pos.y, floor));
-	t_fvector b = raycastfloor(setfvector2d(-1.0471975512, -1.0471975512), setfvector2d(play.pos.y, floor));
+	t_fvector a = raycastfloor(setfvector2d(1.0471975512 + play.rotate.z, -1.0471975512), setfvector2d(play.pos.y, floor));
+	t_fvector b = raycastfloor(setfvector2d(-1.0471975512 + play.rotate.z, -1.0471975512), setfvector2d(play.pos.y, floor));
 	
 	wa.p[0] = setfvector(min.x, floor, min.y, 1);
 	wa.p[1] = setfvector(min.x, floor, max.y, 1);
@@ -400,13 +388,14 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	
 	if (i == 0)
 	{
+		// printf("%f %f\n", wa.p[1].x, wa.p[1].y);
 		offloorright[0] = ((a.x + play.pos.z - min.y) / dy);
-		offloorright[1] = ((a.z *3 + play.pos.x - min.x) / dx);
+		offloorright[1] = ((a.z + play.pos.x - min.x) / dx);
 		offloorleft[0] = ((b.x + play.pos.z - min.y) / dy);
-		offloorleft[1] = ((b.z *3+ play.pos.x - min.x) / dx);
+		offloorleft[1] = ((b.z + play.pos.x - min.x) / dx);
 		// if (i == 0)
-			// printf("%f\n", offloorright[1]);
-	printf("%f %f %f %f %f %f\n", offloorleft[0], offloorleft[1]  ,offloorright[0],offloorright[1], play.pos.x , min.y);
+		// 	printf("%f %f\n", topleft[0], topleft[0]);
+		
 	}
 
 	fl[0] = wa.p[0];
@@ -414,9 +403,13 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	fl[2] = wa.p[2];
 	fl[3] = wa.p[1];
 	
-	if (i == 0)
+	if (i ==0)
+	{
 		clipforfloor(&play, fl, topleft, topright);
-	
+		
+		// topleft[1] = offloorleft[1];
+	}
+	printf("\n");
 	fl[0] = multipmatrix(fl[0], projec);
 	fl[0] = divfvector(fl[0], fl[0].w, fl[0].w, fl[0].w);
 	fl[0] = addfvector(fl[0], 1, 1, 0);
@@ -440,10 +433,16 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	// 	s++;
 	// }
 	// free(mask);
-	// if (i == 0)
-	// 	printf("%f %f %f %f\n", fl[0].w,  fl[1].w, fl[2].w, fl[3].w);
 	if (i == 0)
-		drawfloor1(p, wa, color1, play, offloor, fl, offloorright, offloorleft, topleft, topright);
+	// 	{
+			// printf("1 %f %f %f %f\n", fl[0].x,  fl[1].x, fl[2].x, fl[3].x);
+	// 		kef = (fl[0].y - 400.0)/ 400.0;
+			topleft[1] = (1.0 - topleft[1]);//*kef);
+	// 		kef = (fl[3].y - 400.0)/ 400.0;
+			topright[1] = (1.0 - topright[1]);//*kef);
+	// 	}
+	// if (i == 0)
+		// drawfloor1(p, wa, color1, play, offloor, fl, offloorright, offloorleft, topleft, topright);
 
 		
 	c = 0;
@@ -484,7 +483,7 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 			// 	drow_wall(p, wa, texture, offset, play.rotate.x);
 			// printf ("%f %f %f %f\n", fl.x, fl.y, fl.z, fl.w);
 			
-				// drawline(p, fl[0], fl[1], color);
+			// drawline(p, fl[0], fl[1], color);
 			drawline(p, wa.p[0], wa.p[1], color);
 			drawline(p, wa.p[0], wa.p[2], color);
 			drawline(p, wa.p[2], wa.p[3], color);
@@ -499,7 +498,11 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	{
 		if (fl[1].x < 800 && fl[1].x > 0 && fl[1].y > 0 && fl[1].y < 800)
 			p[(int)fl[1].x + ((int)fl[1].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
-		if (fl[3].x < 800 && fl[3].x > 0 && fl[3].y > 0 && fl[3].y < 800)
+		if (fl[2].x < 800 && fl[2].x > 0 && fl[2].y > 0 && fl[2].y < 800)
+			p[(int)fl[2].x + ((int)fl[2].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
+		if (fl[0].x < 800 && fl[0].x > 0 && fl[0].y > 0 && fl[0].y < 800)
+			p[(int)fl[0].x + ((int)fl[0].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
+		if (fl[3].x < 800 && fl[3].x > 0 && fl[2].y > 0 && fl[3].y < 800)
 			p[(int)fl[3].x + ((int)fl[3].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
 	}
 	// free(fl);

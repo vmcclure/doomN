@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:40:29 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/06/06 18:37:19 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/06/12 18:58:13 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,22 @@ typedef struct	s_settingui
 	t_button	minusmusic;
 }				t_settingui;
 
+typedef struct	s_floor
+{
+	float		dx;
+	float		dy;
+	t_wall		wa;
+	t_fvector2d min;
+	t_fvector2d max;
+	float		offloorright[2];
+	float		offloorleft[2];
+	float		topleft[2];
+	float		topright[2];
+	t_fvector 	a;
+	t_fvector	b;
+	size_t		floor;
+}				t_floor;
+
 typedef struct	s_doom
 {
 	char		*path;
@@ -239,13 +255,22 @@ typedef struct	s_doom
 	t_map		thismap;
 }				t_doom;
 
+typedef struct	s_dot
+{
+	t_ivector2d verh[800];
+    t_ivector2d niz[800];
+    t_ivector2d verhtext[800];
+    t_ivector2d niztext[800];
+}				t_dot;
+
 t_tga		*tga;
 t_tga		*tgafloor;
 t_tga		*tgaenemy;
 
+int			switchcordwall(t_fvector *p1, t_fvector *p2, float *offset, t_fvector2d angle);
 void		initsettingui(t_doom *doom);
 void		initsetting(t_setting *s);
-
+void		calculate_floor(t_player play,t_fvector *w, uint32_t *p, t_tga texture, size_t count, size_t floor);
 void		drawpoint(uint32_t *p, t_ivector2d size, t_ivector2d cord, t_rgba color);
 void		drawrect(t_doom *doom, t_irect rect, t_rgba color);
 void		drawline(uint32_t *p, t_fvector start, t_fvector end, t_rgb color);
@@ -254,7 +279,7 @@ void		drow_wall(uint32_t *p, t_wall wall, t_tga image, float *offset, float rota
 void		drawfloor(uint32_t *p, t_wall wa, t_rgb color, t_player player, double *offloor, t_fvector	*fl);
 void		drawfloor1(uint32_t *p, t_wall wa, t_rgb color, t_player player, double *offloor, t_fvector	*fl, float *offloorright, float *offloorleft, float *topleft, float *topright);  
 void		drawceil(uint32_t *p, t_wall wa, t_rgb color);
-
+void		drow_floor(t_floor *for_floor, uint32_t *p);
 void		drawobj(t_doom *doom, t_map map);
 
 void		drawminimap(uint32_t *p, t_doom *doom, size_t sector, t_ivector2d cord);
@@ -299,6 +324,7 @@ void		switchlevel(t_doom *doom, size_t level);
 t_mat4x4	matcam(t_player *player);
 t_mat4x4	matprojection(t_camera cam);
 t_camera	initcam(t_ivector2d sizewin);
+
 
 int			clip(t_player *player, t_fvector p[4], float offset[4], size_t c);
 
