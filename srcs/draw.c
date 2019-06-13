@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:41:37 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/06/12 21:30:37 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/06/13 19:44:58 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,7 +351,7 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 	c = 0;
 	cammat = matcam(&play);
 	projec = matprojection(initcam(setivector2d(800, 800)));
-	if (i ==0)
+	if (i ==1)
 		calculate_floor(play, w, p, texture, count, floor);
 	//calculate floor
 	t_fvector2d min;
@@ -442,7 +442,7 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 			topright[1] = (1.0 - topright[1]);//*kef);
 	// 	}
 	// if (i == 0)
-		// drawfloor1(p, wa, color1, play, offloor, fl, offloorright, offloorleft, topleft, topright);
+	// 	drawfloor1(p, wa, color1, play, offloor, fl, offloorright, offloorleft, topleft, topright);
 
 		
 	c = 0;
@@ -480,7 +480,7 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 			// if (c == 5)
 			//	printf ("%zu niz %f\n", c, offset[0]);
 			// if (w[c].z == -1)			
-			// 	drow_wall(p, wa, texture, offset, play.rotate.x);
+				// drow_wall(p, wa, texture, offset, play.rotate.x);
 			// printf ("%f %f %f %f\n", fl.x, fl.y, fl.z, fl.w);
 			
 			// drawline(p, fl[0], fl[1], color);
@@ -493,17 +493,17 @@ void	drawsectorv2(uint32_t *p, t_player play, t_fvector *w, size_t count, size_t
 		
 		// color1 = setrgb(255, 0, 255);
 	}
-	color1 = setrgb(255, 0, 255);
-	if (i == 0)
+	color1 = setrgb(255, 255, 0);
+	if (i == 1)
 	{
 		if (fl[1].x < 800 && fl[1].x > 0 && fl[1].y > 0 && fl[1].y < 800)
-			p[(int)fl[1].x + ((int)fl[1].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
+			p[(int)fl[1].x + ((int)fl[1].y * 800)] = ((((((255 << 8) | 0) << 8) | 255) << 8) | 0);
 		if (fl[2].x < 800 && fl[2].x > 0 && fl[2].y > 0 && fl[2].y < 800)
-			p[(int)fl[2].x + ((int)fl[2].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
+			p[(int)fl[2].x + ((int)fl[2].y * 800)] = ((((((255 << 8) | 0) << 8) | 255) << 8) | 0);
 		if (fl[0].x < 800 && fl[0].x > 0 && fl[0].y > 0 && fl[0].y < 800)
-			p[(int)fl[0].x + ((int)fl[0].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
+			p[(int)fl[0].x + ((int)fl[0].y * 800)] = ((((((255 << 8) | 0) << 8) | 255) << 8) | 0);
 		if (fl[3].x < 800 && fl[3].x > 0 && fl[2].y > 0 && fl[3].y < 800)
-			p[(int)fl[3].x + ((int)fl[3].y * 800)] = ((((((255 << 8) | 255) << 8) | 0) << 8) | 243);
+			p[(int)fl[3].x + ((int)fl[3].y * 800)] = ((((((255 << 8) | 0) << 8) | 255) << 8) | 0);
 	}
 	// free(fl);
 }

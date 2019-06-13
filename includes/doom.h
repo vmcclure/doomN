@@ -6,7 +6,7 @@
 /*   By: vmcclure <vmcclure@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:40:29 by gdaniel           #+#    #+#             */
-/*   Updated: 2019/06/12 18:58:13 by vmcclure         ###   ########.fr       */
+/*   Updated: 2019/06/13 16:39:46 by vmcclure         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,7 @@ typedef struct	s_floor
 	float		offloorleft[2];
 	float		topleft[2];
 	float		topright[2];
+	float		posplay[2];
 	t_fvector 	a;
 	t_fvector	b;
 	size_t		floor;
@@ -259,8 +260,8 @@ typedef struct	s_dot
 {
 	t_ivector2d verh[800];
     t_ivector2d niz[800];
-    t_ivector2d verhtext[800];
-    t_ivector2d niztext[800];
+    t_fvector2d verhtext[800];
+    t_fvector2d niztext[800];
 }				t_dot;
 
 t_tga		*tga;
@@ -279,7 +280,7 @@ void		drow_wall(uint32_t *p, t_wall wall, t_tga image, float *offset, float rota
 void		drawfloor(uint32_t *p, t_wall wa, t_rgb color, t_player player, double *offloor, t_fvector	*fl);
 void		drawfloor1(uint32_t *p, t_wall wa, t_rgb color, t_player player, double *offloor, t_fvector	*fl, float *offloorright, float *offloorleft, float *topleft, float *topright);  
 void		drawceil(uint32_t *p, t_wall wa, t_rgb color);
-void		drow_floor(t_floor *for_floor, uint32_t *p);
+void		drow_floor(t_floor *for_floor, uint32_t *p, t_tga texture);
 void		drawobj(t_doom *doom, t_map map);
 
 void		drawminimap(uint32_t *p, t_doom *doom, size_t sector, t_ivector2d cord);
@@ -306,7 +307,7 @@ void		minusstamina(t_player *p, float minusvalue);
 void		addhealth(t_player *p, float addvalue);
 void		minushealth(t_player *p, float minusvalue);
 void		playerdeath(t_player *p);
-
+void		put_other_sector(t_dot *dot, t_floor *for_floor, uint32_t *p, t_tga *image1);
 void		playermove(t_doom *doom, double delta);
 void		playerjump(t_doom *doom, t_player *player);
 

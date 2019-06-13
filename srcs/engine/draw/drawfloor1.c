@@ -343,146 +343,146 @@ void	drawfloor1(uint32_t *p, t_wall wa, t_rgb color, t_player player, double *of
 
 
 	
-	// if (wa.p[0].x > wa.p[1].x)
-	// 	ft_swap((void**)&wa.p[0], (void**)&wa.p[1]);
-	// x = wa.p[0].x;
-	// i = 0;
-	// dx = fabsf(offloorright[0] - offloorleft[0]);
-	// dy = fabsf(offloorright[1] - offloorleft[1]);
-	// // printf("%f %f %f %f %f\n", topleft[0], topleft[1], topright[0], topright[1], dx);
-	// dx = dx / 799.0;
-	// dy = dy / 799.0;
-	// // printf(" %f \n", dx);
-	// // dir = (atan(dy/dx));
-	// while (i < 800)
-	// {
-	// 	nizx[i] = offloorleft[0] + (float)i * dx;
-	// 	nizy[i] = offloorleft[1] + (float)i * dy;		
-	// 	i++;
-	// }
-	// printf("\n");
-	// // printf("%f %f %f %f\n\n", fl[0].y, fl[1].y, fl[2].y, fl[3].y);
-	// i = 0;
-	// dx = fabsf(fl[1].x - fl[0].x);
-	// dy = fabsf(fl[1].y - fl[0].y);
-	// dy = dy/dx;
-	// while (i < fl[1].x)
-	// {
-	// 	verhx[i] = i;
-	// 	verhy[i] = fl[0].y -  ((float)i * dy );
+	if (wa.p[0].x > wa.p[1].x)
+		ft_swap((void**)&wa.p[0], (void**)&wa.p[1]);
+	x = wa.p[0].x;
+	i = 0;
+	dx = fabsf(offloorright[0] - offloorleft[0]);
+	dy = fabsf(offloorright[1] - offloorleft[1]);
+	// printf("%f %f %f %f %f\n", topleft[0], topleft[1], topright[0], topright[1], dx);
+	dx = dx / 799.0;
+	dy = dy / 799.0;
+	// printf(" %f \n", dx);
+	// dir = (atan(dy/dx));
+	while (i < 800)
+	{
+		nizx[i] = offloorleft[0] + (float)i * dx;
+		nizy[i] = offloorleft[1] + (float)i * dy;		
+		i++;
+	}
+	printf("\n");
+	// printf("%f %f %f %f\n\n", fl[0].y, fl[1].y, fl[2].y, fl[3].y);
+	i = 0;
+	dx = fabsf(fl[1].x - fl[0].x);
+	dy = fabsf(fl[1].y - fl[0].y);
+	dy = dy/dx;
+	while (i < fl[1].x)
+	{
+		verhx[i] = i;
+		verhy[i] = fl[0].y -  ((float)i * dy );
 		
-	// 	i++;
-	// }
-	// k = 0;
-	// dx = fabsf(fl[1].x - fl[2].x);
-	// dy = fabsf(fl[1].y - fl[2].y);
-	// dy = dy/dx;
-	// while (i < fl[2].x)
-	// {
-	// 	verhx[i] = i;
-	// 	verhy[i] = fl[1].y -  ((float)k * dy );
+		i++;
+	}
+	k = 0;
+	dx = fabsf(fl[1].x - fl[2].x);
+	dy = fabsf(fl[1].y - fl[2].y);
+	dy = dy/dx;
+	while (i < fl[2].x)
+	{
+		verhx[i] = i;
+		verhy[i] = fl[1].y -  ((float)k * dy );
 		
-	// 	i++;
-	// 	k ++;
-	// }
-	// dx = fabsf(fl[2].x - fl[3].x);
-	// dy = fabsf(fl[2].y - fl[3].y);
-	// dy = dy/dx;
-	// k = 0;
-	// while (i < fl[3].x)
-	// {
-	// 	verhx[i] = i;
-	// 	verhy[i] = fl[2].y + ((float)k * dy );		
-	// 	i++;
-	// 	k++;		
-	// }
-	// // printf("%d %f %f %f %f\n", i, fl[2].y, dy, verhy[i-1], fl[3].y);
-	// i = 0;
+		i++;
+		k ++;
+	}
+	dx = fabsf(fl[2].x - fl[3].x);
+	dy = fabsf(fl[2].y - fl[3].y);
+	dy = dy/dx;
+	k = 0;
+	while (i < fl[3].x)
+	{
+		verhx[i] = i;
+		verhy[i] = fl[2].y + ((float)k * dy );		
+		i++;
+		k++;		
+	}
+	// printf("%d %f %f %f %f\n", i, fl[2].y, dy, verhy[i-1], fl[3].y);
+	i = 0;
 	
 
-	// dx = fabsf(fl[0].x - fl[1].x);
-	// dy = (1.0 - topleft[1])/dx;
-	// k = 0;
-	// while(i < fl[1].x)
-	// {
-	// 	verhxtext[i] = topleft[0];
-	// 	verhytext[i] = topleft[1] + dy * k;		
-	// 	i++;
-	// 	k++;		
-	// }
+	dx = fabsf(fl[0].x - fl[1].x);
+	dy = (1.0 - topleft[1])/dx;
+	k = 0;
+	while(i < fl[1].x)
+	{
+		verhxtext[i] = topleft[0];
+		verhytext[i] = topleft[1] + dy * k;		
+		i++;
+		k++;		
+	}
 	
-	// // printf("%f %f %f %f %f\n", topleft[0], topleft[1], topright[0], topright[1], verhytext[i-1]);
-	// k = 0;
-	// dx = fabsf(fl[1].x - fl[2].x);
-	// dx = 1.0 / dx;
-	// while (i < fl[2].x)
-	// {
-	// 	verhxtext[i] = dx *k;//topleft[0];
-	// 	verhytext[i] = 1;//topleft[1] + dy * (float)k;
+	// printf("%f %f %f %f %f\n", topleft[0], topleft[1], topright[0], topright[1], verhytext[i-1]);
+	k = 0;
+	dx = fabsf(fl[1].x - fl[2].x);
+	dx = 1.0 / dx;
+	while (i < fl[2].x)
+	{
+		verhxtext[i] = dx *k;//topleft[0];
+		verhytext[i] = 1;//topleft[1] + dy * (float)k;
 		
-	// 	i++;
-	// 	k++;
-	// }
-	// k = 0;
-	// dx = fabsf(fl[2].x - fl[3].x);
-	// dy = (1-topright[1])/dx;
-	// while (i < fl[3].x)
-	// {
-	// 	verhxtext[i] = topright[0];
-	// 	verhytext[i] = 1 - (dy * (float)k);
-	// 			// printf("%f %f\n", verhxtext[i], verhytext[i]);
-	// 	i++;
+		i++;
+		k++;
+	}
+	k = 0;
+	dx = fabsf(fl[2].x - fl[3].x);
+	dy = (1-topright[1])/dx;
+	while (i < fl[3].x)
+	{
+		verhxtext[i] = topright[0];
+		verhytext[i] = 1 - (dy * (float)k);
+				// printf("%f %f\n", verhxtext[i], verhytext[i]);
+		i++;
 
-	// 	k++;
-	// }
-	// i = 0;
-	// // dx = 1.0 / 800;
-	// // while (i < 800.0)
-	// // {
-	// // 	verhxtext[i] = (float)i * dx;
-	// // 	verhytext[i] = 1.0;
-	// // 	i++;
-	// // }
-	// x = 0;
-	// while(x < 800)
+		k++;
+	}
+	i = 0;
+	// dx = 1.0 / 800;
+	// while (i < 800.0)
 	// {
-	// 	y = verhy[(int)x];
-	// 	dy = (800.0 -verhy[(int)x]);
-	// 	dxtext = verhxtext[(int)x] - nizx[(int)x];
-	// 	dxtext = dxtext/dy;
+	// 	verhxtext[i] = (float)i * dx;
+	// 	verhytext[i] = 1.0;
+	// 	i++;
+	// }
+	x = 0;
+	while(x < 800)
+	{
+		y = verhy[(int)x];
+		dy = (800.0 -verhy[(int)x]);
+		dxtext = verhxtext[(int)x] - nizx[(int)x];
+		dxtext = dxtext/dy;
 		
-	// 	dytext = verhytext[(int)x] - nizy[(int)x];
+		dytext = verhytext[(int)x] - nizy[(int)x];
 		
-	// 	dytext = dytext/dy;
+		dytext = dytext/dy;
 
 		
-	// 	while (y < 800)
-	// 	{
-	// 		yp =(int)((image->height -1)* (verhytext[(int)x] - (y - verhy[(int)x]) * dytext));
-	// 		xp = (int)((image->width - 1) * (verhxtext[(int)x] - (y - verhy[(int)x]) * dxtext));
-	// 				// printf("%d \n ", xp);
-	// 		xp = xp ;//% image->width);
-	// 		yp = yp;// % image->height;
-	// 		if (xp < image->width && xp >= 0 && yp < image->height && yp >= 0 )
-	// 		{
-	// 			r = image->pic[yp][(int)xp].red;
-	// 			g = image->pic[yp][(int)xp].green;
-	// 			b = image->pic[yp][(int)xp].blue;
-	// 		}
-	// 		else
-	// 		{
-	// 			r = 0;
-	// 			g = 255;
-	// 			b = 0;
-	// 			// printf("%d %d\n", xp, yp);
-	// 		}
-	// 		// a = image->pic[yp][(int)xp].alpha;
-	// 		y++;
+		while (y < 800)
+		{
+			yp =(int)((image->height -1)* (verhytext[(int)x] - (y - verhy[(int)x]) * dytext));
+			xp = (int)((image->width - 1) * (verhxtext[(int)x] - (y - verhy[(int)x]) * dxtext));
+					// printf("%d \n ", xp);
+			xp = xp ;//% image->width);
+			yp = yp;// % image->height;
+			if (xp < image->width && xp >= 0 && yp < image->height && yp >= 0 )
+			{
+				r = image->pic[yp][(int)xp].red;
+				g = image->pic[yp][(int)xp].green;
+				b = image->pic[yp][(int)xp].blue;
+			}
+			else
+			{
+				r = 0;
+				g = 255;
+				b = 0;
+				// printf("%d %d\n", xp, yp);
+			}
+			// a = image->pic[yp][(int)xp].alpha;
+			y++;
 			
-	// 		p[(int)x + ((int)(y) * 800)] = ((((((255 << 8) | r) << 8) | g) << 8) | b);
-	// 	}
-	// 	x++;
-	// }
+			p[(int)x + ((int)(y) * 800)] = ((((((255 << 8) | r) << 8) | g) << 8) | b);
+		}
+		x++;
+	}
 	// printf("\n");
 	i = 0;
 	// printf("\n");
